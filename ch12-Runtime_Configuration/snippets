@@ -1,0 +1,42 @@
+
+# Page 144
+
+IFS=$'\n'
+file=words.cfg
+settings=( $( < "$file") )
+eval "${settings[@]%%#*}"
+comments=( "${settings[@]#*## }" )
+printf "%s\n" "${comments[@]}"
+
+# Page 146
+
+[ ${verbose:-0} -gt 0 ] && printf "%s\n" "Finished parsing options"
+
+verbose=1 myscriptname
+
+ssh -p "$port" -l "$user" "$host" \
+      "cd \"$dest\" || exit;tar -xpzf -" < "$tarfile" &&
+        touch "$syncfile"
+
+
+var=${item%%:*}
+description=${item#*:}
+
+# Page 152
+
+upload -qt
+
+# Page 153 
+
+var=location
+val='some"where'
+printf "%s\n" "$var=\"${val//\"/\\\"}\""
+
+# Page 154
+
+upload -t -h www.example.com -p 666 -u paradigm -d public_html \
+ -s $HOME/public_html/www.example.com > www.example.com.cfg
+cat www.example.com.cfg
+
+
+

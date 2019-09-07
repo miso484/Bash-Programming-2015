@@ -1,0 +1,20 @@
+
+# Listing 12-4. Set Variables by Question and Answer
+
+read -ep "Directory containing dictionary: " dict
+read -ep "File containing word list: " wordfile
+read -ep "File containing compound words and phrases: " compoundfile
+read -sn1 -p "Include compound words and phrases in results (y/n)? " compounds
+
+echo
+read -ep "Save parameters (y/n)? " save
+case $save in
+  y|Y) read -ep "Enter path to configuration file: " configfile
+   {
+     printf '%-30s ## %s"\n' \
+       "dict=$dict" "Directory containing dictionary" \
+       "wordfile=$wordfile" "File containing word list" \
+       "compoundfile=$compoundfile" "File containing compound words and phrases" \
+       "Compounds" "$Compounds" "Include compound words and phrases in results?"
+   } > "${configfile:-/dev/tty}"
+esac

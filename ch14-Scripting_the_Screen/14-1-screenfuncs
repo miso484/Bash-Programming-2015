@@ -1,0 +1,98 @@
+
+# Listing 14-1a. screen-funcs, Library of Screen Manipulation Functions
+
+. screen-vars
+
+
+# Listing 14-1b. printat, Place the Cursor at a Specified Location and Print Optional String
+
+printat() #@ USAGE: printat [row [column [string]]]
+{
+     printf "${cu_row_col?}" ${1:-1} ${2:-1}
+     if [ $# -gt 2 ]
+     then
+        shift 2
+        printf "%s" "$*"
+     fi
+}
+
+
+# Listing 14-1c. put_block and put_block_at, Print a Block of Text Anywhere on the Screen
+
+put_block() #@ Print arguments in a block beginning at the current position
+{
+  printf "$cu_save"        ## save cursor location
+  printf "%s$cu_NL" "$@" ## restore cursor location, move line down, save cursor
+}
+
+put_block_at() #@ Print arguments in a block at the position in $1 and $2
+{
+  printat "$1" "$2"
+  shift 2
+  put_block "$@"
+}
+
+
+# Listing 14-1d. _max_length, Store Length of Longest Argument in _MAX_LENGTH
+
+_max_length() #@ store length of longest argument in _MAX_LENGTH
+{
+  local var
+  _MAX_LENGTH=${#1}        ## initialize with length of first parameter
+  shift                    ## ...and remove first parameter
+  for var                  ## loop through remaining parameters
+  do
+     [ "${#var}" -gt "$_MAX_LENGTH" ] && _MAX_LENGTH=${#var}
+  done
+}
+
+
+# Listing 14-1e. print_block, Clear Area and Print Block
+
+print_block() #@ Print arguments in a block with space around them
+{
+  local _MAX_LENGTH
+  _max_length "$@"
+  printf "$cu_save"
+  printf " %-${_MAX_LENGTH}s $cu_NL" " " "$@" " "
+}
+
+print_block_at() #@ Move to position, remove 2 parameters and call print_block
+{
+  printat $1 $2
+  shift 2
+  print_block "$@"
+}
+
+
+# Listing 14-1f. wrap, Split String into Array with Elements Not Exceeding Maximum Length
+
+wrap() #@ USAGE: wrap string length
+{        #@ requires bash-3.1 or later
+  local words=$1 textwidth=$2 line= opts=$-
+  local len=0 templen=0
+  set -f
+
+  unset -v wrap
+  for word in $words
+  do
+     templen=$(( $len + 1 + ${#word} )) ##       Test adding a word
+     if [ "$templen" -gt "$textwidth" ] ##       Does adding a word exceed length?
+     then
+        wrap+=( "$line" )                     ## Yes, store line in array
+        printf -v line "%s" "$word"           ## begin new line
+        len=${#word}
+     else
+        len=$templen                          ## No, add word to line
+        printf -v line "%s" "${line:+"$line      "}" "$word"
+     fi
+  done
+  wrap+=( "$line" )
+
+  case $opts in
+     *f*) ;;
+     *) set +f ;;
+  esac
+}
+
+

@@ -1,0 +1,9 @@
+
+# Listing 8-1. kjvfirsts, Print Book, Chapter, Verse, and First Words from KJV
+
+while IFS=: read book chapter verse text
+do
+   firstword=${text%% *}
+   printf "%s %s:%s %s\n" "$book" "$chapter" "$verse" "$firstword"
+done < "$kjv"
+

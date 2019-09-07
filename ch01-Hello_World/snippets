@@ -1,0 +1,32 @@
+
+# Page 1
+
+echo $HOME
+
+
+pwd
+echo "$PWD"
+
+
+echo Hello, World!
+
+type test
+
+type -a test
+
+
+# Page 2
+
+mkdir bin
+
+PATH=$PATH:$HOME/bin
+
+echo echo Hello, World! > bin/hw
+
+bash bin/hw
+
+chmod +x bin/hw
+
+hw
+
+

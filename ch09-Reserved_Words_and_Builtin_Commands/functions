@@ -1,0 +1,6 @@
+
+cd() #@ DESCRIPTION: change directory and display 10 most recent files
+{    #@ USAGE: cd DIR
+  builtin cd "$@" || return 1 ## don't call function recursively
+  ls -t | head
+}

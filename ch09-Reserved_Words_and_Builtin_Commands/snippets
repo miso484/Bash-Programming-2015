@@ -1,0 +1,207 @@
+
+# Page 97
+
+help -m help
+
+# Page 98
+
+help -d '*le' tr
+
+time echo {1..30000} >/dev/null 2>&1
+
+TIMEFORMAT='%R seconds %P%% CPU usage'
+time echo {1..30000} >/dev/null
+
+# Page 99
+
+{ time echo {1..30000} >/dev/null 2>&1 ; } 2> numlisttime
+cat numlisttime
+
+printf "%s\n" ' First line \' ' Second line ' | {
+read
+sa "$REPLY"
+}
+
+printf "%s\n" '   First line\' " Second line " | {
+ read -r
+ read line2
+ sa "$REPLY" "$line2"
+}
+
+# Page 100
+
+printf "%s\n" '   First line\' " Second line " | {
+read -r
+IFS= read line2
+sa "$REPLY" "$line2"
+}
+
+printf "%s\n" "first second third fourth fifth sixth" | {
+read a b c d
+sa "$a" "$b" "$c" "$d"
+}
+
+# Page 101
+
+printf "%s\n" "first second third fourth fifth sixth" | {
+read -a array
+sa "${array[0]}"
+sa "${array[5]}"
+}
+
+
+printf "%s\n" "first second third fourth fifth sixth" | {
+read -d ' nrh' a
+read -d 'nrh' b
+read -d 'rh' c
+read -d 'h' d
+sa "$a" "$b" "$c" "$d"
+}
+
+
+read -sn1 -p "Continue (y/n)? " var
+case ${var^} in ## bash 4.0, convert $var to uppercase
+  Y) ;;
+  N) printf "\n%s\n" "Good bye."
+     exit
+     ;;
+esac
+
+
+# Page 102
+
+read -t .1 var
+read -t 2 var
+
+TMOUT=2.5
+TIMEFORMAT='%R seconds %P%% CPU usage'
+time read
+
+
+exec 3<$HOME/txt
+read var <&3
+echo "$var"
+read -u3 var
+echo "$var"
+read var <&3
+echo "$var"
+read -u3 var
+echo "$var"
+
+# Page 103
+
+x=yes
+a=x
+eval "sa \"\$$a\""
+
+
+# Page 104
+
+setvar() { eval "$1=\"$2\""; }
+
+
+# Page 105
+
+{
+ setvar() { eval "$1=\$2"; }
+ getvar() { eval "printf '%s\n' \"\${$1}\""; }
+ n=1
+ setvar "qwerty_$n" 'xxx " echo Hello"'
+ getvar "qwerty_$n"
+}
+{
+ setvar2() { eval "$1=\"$2\""; }
+ setvar2 "qwerty_$n" 'xxx " echo Hello"'
+}
+
+set -x ## shell will now print commands and arguments as they are executed
+setvar "qwerty_$n" 'xxx " echo Hello"'
+
+setvar2 "qwerty_$n" 'xxx " echo Hello"'
+
+
+string1=something
+string2='rm -rf *' ## we do NOT want this to be executed
+eval "$var=\"Example=$string1\" $string2" ## WRONG!! Files gone!
+combo="Example=$string1 $string2"
+eval "$var=\$combo" ## RIGHT!
+
+
+printf "%s\n" "$xx"
+
+# Page 106
+
+year=$(date +%Y)
+month=$(date +%m)
+day=$(date +%d)
+hour=$(date +%H)
+minute=$(date +%M)
+second=$(date +%S)
+
+
+date=$(date +%Y-%m-%dT%H:%M:%S)
+time=${date#*T}
+date=${date%T*}
+year=${date%%-*}
+daymonth=${date#*-}
+month=${daymonth%-*}
+day=${daymonth#*-}
+hour=${time%%:*}
+minsec=${time#*-}
+minute=${minsec%-*}
+second=${minsec#*-}
+
+
+eval "$(date "+year=%Y month=%m day=%d hour=%H minute=%M second=%S")"
+
+
+# Page 107
+
+which echo printf
+
+type echo printf sa
+
+type -a echo printf
+
+type -p echo printf sa time ## no outpus as no files would be executed
+type -ap echo printf sa time
+
+
+ type -P echo printf sa time
+
+# Page 108
+
+ type -t echo printf sa time ls
+
+cd() #@ DESCRIPTION: change directory and display 10 most recent files
+{    #@ USAGE: cd DIR
+  builtin cd "$@" || return 1 ## don't call function recursively
+  ls -t | head
+}
+
+ls -ld $HOME/Chess
+
+cd $HOME/Chess
+pwd
+
+pwd -P
+
+# Page 109
+
+version=4.0 ## or use your bash version (but I recommend 4.0)
+wget ftp://ftp.cwru.edu/pub/bash/bash-$version.tar.gz
+gunzip bash-$version.tar.gz
+tar xf bash-$version.tar
+cd bash-$version
+./configure
+
+
+cd examples/loadables
+make
+
+enable -f ./strftime strftime
+help strftime
+
+
+
+

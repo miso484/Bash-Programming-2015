@@ -1,0 +1,235 @@
+
+# Page ??
+
+unset x
+showvar
+x=3
+showvar
+export x
+showvar
+x=
+showvar
+
+
+printf "%s\n" ${RANDOM}{,,,,,} |
+  while read num
+  do
+     [ $num -gt ${biggest:=0} ] && biggest=$num
+  done
+printf "The largest number is: %d\n" "$biggest"
+
+
+# Page
+
+case $BASH_VERSION in
+  [12].*) echo "You need at least bash3.0 to run this script" >&2; exit 2;;
+esac
+
+# Page 
+
+while IFS=: read login a b c name e
+do
+   printf "%-12s %s\n" "$login" "$name"
+done < /etc/passwd
+
+long_variable_name_which_may_tell_you_something_about_its_purpose=1
+
+# Page 
+
+var=
+sa "${var:-default}" ## The sa script was introduced in Chapter 4
+
+
+var=
+sa "${var-default}" ## var is set, so expands to nothing
+unset var
+sa "${var-default}" ## var is unset, so expands to "default"
+
+defaultfile=$HOME/.bashrc
+## parse options here
+filename=${filename:-"$defaultfile"}
+
+var=
+sa "${var:+alternate}" ## $var is set but empty
+
+var=value
+sa "${var:+alternate}" ## $var is not empty
+
+var=
+sa "${var+alternate}" ## var is set
+unset var
+sa "${var+alternate}" ## $var is not set
+var=value
+sa "${var:+alternate}" ## $var is set and not empty
+
+# Page 
+
+var=
+for n in a b c d e f g
+do
+   var="$var $n"
+done
+sa "$var"
+
+
+var=
+for n in a 
+do
+   var="${va
+done
+sa "$var"
+
+
+if [ -n "$var" ]
+then
+   var="$var $n"
+else
+   var=$n
+fi
+
+
+[ -n "$var" ] && var="$var $n" || var=$n
+
+
+ unset n
+ while :
+ do
+ echo :$n:
+ [ ${n:=0} -gt 3 ] && break ## set $n to 0 if unset or empty
+ n=$(( $n + 1 ))
+ done
+
+
+# Page 
+
+checkarg
+checkarg x
+checkarg '' ''
+checkarg x ''
+checkarg x x
+
+
+read passwd
+if [ ${#passwd} -lt 8 ]
+then
+   printf "Password is too short: %d characters\n" "$#" >&2
+   exit 1
+fi
+
+# Page 
+
+var=Toronto
+var=${var%o*}
+printf "%s\n" "$var"
+
+dname /etc/passwd
+dname bin
+
+var=Toronto
+sa "${var%%o*}"
+
+
+# Page 
+
+var=Toronto
+sa "${var#*o}"
+
+scriptname=${0##*/} ## /home/chris/bin/script
+
+passwd=zxQ1.=+-a
+printf "%s\n" "${passwd//?/*}"
+
+printf "%s\n" "${passwd/[[:punct:]]/*}"
+
+var=Toronto
+sa "${var:3:2}"
+
+sa "${var:3}"
+
+# Page 
+
+sa "${var: -3}"
+
+x=yes
+a=x
+sa "${!a}"
+
+
+# Page 
+
+eval "sa \$$a"
+
+var=toronto
+sa "${var^}"
+sa "${var^[n-z]}"
+sa "${var^^[a-m]}"
+sa "${var^^[n-q]}"
+sa "${var^^}"
+
+# Page 
+
+var=TORONTO
+sa "${var,,}"
+sa "${var,,[N-Q]}"
+
+shift 3
+
+shift "$#"
+
+shift $(( $# - 2 ))
+
+for param in "$@" ## or just: for param
+do
+   : do something with $param
+done
+
+
+while [ $# -gt 0 ] ## or: while [ -n "$*" ]
+do
+   : do something with $1
+   shift
+done
+
+# Page 
+
+printf "%s\n" "${BASH_VERSINFO[0]}"
+printf "%s\n" "${BASH_VERSINFO[1]}"
+
+printf "%s\n" "${BASH_VERSINFO[*]}"
+printf "%s\n" "${BASH_VERSINFO[@]}"
+
+printf "%s\n" "${BASH_VERSINFO[@]:1:2}" 
+
+
+# Page 
+
+printf "%s\n" "${#BASH_VERSINFO[*]}"
+printf "%s\n" "${#BASH_VERSINFO[2]}" "${#BASH_VERSINFO[5]}"
+
+name[0]=Aaron
+name[42]=Adams
+
+unset a
+a[${#a[@]}]="1 $RANDOM" ## ${#a[@]} is 0
+a[${#a[@]}]="2 $RANDOM" ## ${#a[@]} is 1
+a[${#a[@]}]="3 $RANDOM" ## ${#a[@]} is 2
+a[${#a[@]}]="4 $RANDOM" ## ${#a[@]} is 3
+printf "%s\n" "${a[@]}"
+
+province=( Quebec Ontario Manitoba )
+printf "%s\n" "${province[@]}"
+
+province+=( Saskatchewan )
+province+=( Alberta "British Columbia" "Nova Scotia" )
+printf "%-25s %-25s %s\n" "${province[@]}"
+
+# Page 
+
+declare -A array
+for subscript in a b c d e
+do
+   array[$subscript]="$subscript $RANDOM"
+done
+printf ":%s:\n" "${array["c"]}" ## print one element
+printf ":%s:\n" "${array[@]}" ## print the entire array
+

@@ -1,0 +1,292 @@
+
+# Page 79
+
+wget http://cfaj.freeshell.org/kjv/kjv.txt
+
+export kjv=$HOME/kjv.txt
+
+while read ## no name supplied so the variable REPLY is used
+do
+   : do something with "$REPLY" here
+done < "$kjv"
+
+
+while read name phone
+do
+   printf "Name: %-10s\tPhone: %s\n" "$name" "$phone"
+done < "$file"
+
+
+# Page 80
+
+while IFS=- read name phone
+do
+printf "Name: %-10s\tPhone: %s\n" "$name" "$phone"
+done < "$file"
+
+# Page 81
+
+cat *.txt | tr aeiou AEIOU > upvowel.txt
+
+
+{
+  date                ## Print the date and time
+  cat report.txt      ## Print the contents of the file
+  printf "Signed: "   ## Print "Signed: " without a newline
+  whoami              ## Print the user's login name
+} | mail -s "Here is the report" paradigm@example.com
+
+
+cat thisfile.txt | head -n 25 > thatfile.txt
+head -n 25 thisfile.txt > thatfile.txt
+
+
+cat "$@" | while read x; do whatever; done
+
+while read x; do : whatever; done < <( cat "$@" )
+
+
+# Page 82
+
+for line in $( cat "$kjv" ); do n=$(( ${n:-0} + 1 )); done
+
+head -n 1 "$kjv"
+
+filetop=$( head -n 1 "$kjv")
+
+read filetop < "$kjv"
+
+book=${filetop%%:*}
+text=${filetop##*:}
+
+IFS=: read book chapter verse test < "$kjv"
+sa "$book" "$chapter" "$verse" "${text%% *}"
+
+
+{
+  read line1
+  read line2
+  read line3
+  read line4
+} < "$kjv"
+
+
+# Page 83
+
+for n in {1..4}
+do
+   read lines[${#lines[@]}]
+done < "$kjv"
+
+
+mapfile -tn 4 lines < "$kjv"
+
+> filename
+
+for file in {a..z}$RANDOM
+do
+   > "$file"
+done
+
+for file in $(ls); do
+
+touch {zzz,xxx,yyy}\ a ## create 3 files with a space in their names
+for file in $(ls *\ *); do echo "$file"; done
+
+# Page 84
+
+for file in *\ *; do echo "$file"; done
+
+cut -c 22 "$kjv" | head -n3
+
+cut -c 22,24,26 "$kjv" | head -n3
+
+cut -c 22-26 "$kjv" | head -n3
+
+
+boys="Brian,Carl,Dennis,Mike,Al"
+printf "%s\n" "$boys" | cut -d, -f3 
+
+
+IFS=,
+boyarray=( $boys )
+printf "%s\n" "${boyarray[2]}"
+temp=${boys#*,*,}
+printf "%s\n" "${temp%%,*}"
+
+# Page 85
+
+wc "$kjv" /etc/passwd
+
+wc < "$kjv"
+
+wc -l "$kjv"
+
+
+set -f
+set -- $var
+echo $#
+
+IFS=$'\n'
+set -f
+set -- $var
+echo $#
+
+# Page 86
+
+grep ':0[57]0:001:' "$kjv" | cut -c -78
+
+while read line
+do
+   case $line in
+     *0[57]0:001:*) printf "%s\n" "${line:0:78}" ;;
+   esac
+done < "$kjv"
+
+grep 'Psalms:023' "$kjv" |
+{
+total=0
+while IFS=: read book chapter verse text
+do
+   set -- $text ## put the verse into the positional parameters
+   total=$(( $total + $# )) ## add the number of parameters
+done
+echo $total
+}
+
+# Page 87
+
+sed -n '/Lev.*:001:001/,/Lev.*:001:003/ s/Leviticus/LEVITICUS/p' "$kjv" |
+cut -c -78
+
+
+sed 's/this/that/g' "$file" > tempfile && mv tempfile "$file"
+
+
+sed -i.bak 's/this/that/g' "$file"
+
+
+sed -n '
+/Jesus wept/ !{
+    h
+}
+/Jesus wept/ {
+    N
+    x
+    G
+    p
+    a\
+---
+    s/.*\n.*\n\(.*\)$/\1/
+    h
+}' "$kjv"
+
+
+awk -F: 'BEGIN { min = 999 } ## set min larger than any verse length
+length($0) - length($1) < min {
+   min = length($0) ­ length($1)
+   verse = $0
+ }
+# Page 88
+END { print verse }' "$kjv"
+
+
+awk '/Jesus wept/ {
+    print previousline
+    print $0
+    n = 1
+    next
+  }
+n == 1 {
+    print $0
+    print "---"
+    n = 2
+  }
+  {
+    previousline = $0
+  }' "$kjv"
+
+
+printf "%s\n" {12..34} | awk '{ total += $1 }
+
+
+sa()
+{
+     pre=: post=:
+     printf "$pre%s$post\n" "$@"
+}
+
+# Page 90
+
+pr4()
+{
+    ## calculate column width
+    local width=$(( (${COLUMNS:-80} - 2) / 4 ))
+    ## Note that braces are necessary on the second $width to separate it from 's'
+    local s=%-$width.${width}s
+    printf "$s $s $s $s\n" "$@"
+}
+
+shopt -s extglob
+shopt -u nocaseglob
+
+mkdir "$HOME/globfest" && cd "$HOME/globfest" || echo Failed >&2
+touch {a..f}{0..9}{t..z}$RANDOM .{a..f}{0..9}$RANDOM
+
+sa a1*
+
+sa *xy
+
+shopt -s nullglob
+sa *xy
+shopt -u nullglob
+
+
+# Page 91
+
+shopt -s failglob
+sa *xy
+shopt -u failglob
+
+
+sa * | wc -l
+
+sa .* | wc -l
+
+shopt -s dotglob
+printf "%s\n" * | wc -l
+
+
+cd $HOME/globfest
+rm *
+touch {john,paul,george,ringo}{john,paul,george,ringo}{1,2}$RANDOM\
+{john,paul,george,ringo}{1,2}$RANDOM{,,} {1,2}$RANDOM{,,,}
+
+pr4 ?(john|paul)2*
+
+pr4 *(john|paul)2*
+
+pr4 @(john|paul)2*
+
+pr4 +(john|paul)2*
+
+pr4 !([jpr0-9]*)
+
+cd $HOME/globfest
+rm -rf *
+touch {{a..d},{A..D}}$RANDOM
+pr4 *
+
+pr4 [ab]*
+
+shopt -s nocaseglob
+pr4 [ab]*
+
+cd $HOME/globfest
+rm -rf *
+mkdir -p {ab,ac}$RANDOM/${RANDOM}{q1,q2}/{z,x}$(( $RANDOM % 10 ))
+
+shopt -s globstar
+pr4 **
+
+

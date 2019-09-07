@@ -1,0 +1,16 @@
+#: Title    : wfe - List words ending with PATTERN
+#: Synopsis : wfe [-c|-h|-v] REGEX
+#: Date     : 2009-04-13
+#: Version  : 1.0
+#: Author   : Miso Stamenic <miso.stamenic@gmail.com>
+#: Options  : -c - Include compound words
+#:            -h - Print usage information
+#:            -v - Print version number
+
+## Script metadata
+scriptname=${0##*/}
+description="List words ending with REGEX"
+usage="$scriptname [-c|-h|-v] REGEX"
+date_of_creation=2009-04-13
+version=1.0
+author="Miso Stamenic"

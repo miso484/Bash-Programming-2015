@@ -1,0 +1,250 @@
+
+# Page 157
+
+array=( a b c d e f g h i j )
+unset array[2] array[4] array[6] array[8]
+
+sa "${array[@]}"
+
+
+for i in "${array[@]}"
+do
+   : do something with each element, $i, here
+done
+
+
+echo "${!array[@]}"
+
+
+# Page 158
+
+for i in "${!array[@]}"
+do
+   : do something with ${array[$i]} here
+done
+
+
+array=( "${array[@]}" )
+echo "${!array[@]}"
+
+for file in log.*
+do
+   : do whatever
+done
+
+# Page 159
+
+declare -A q
+q[c]=1 q[d]=2 q[a]=4
+sa "${q[@]}"
+
+lettersort triangle; printf "%s\n" "$_LETTERSORT"
+lettersort integral; printf "%s\n" "$_LETTERSORT"
+
+isort "St. John's" Halifax Fredericton Charlottetown "Quebec City" \
+                     Toronto Winnipeg Regina Edmonton Victoria
+
+
+# Page 161
+
+capitals=( "St. John's" Halifax Fredericton Charlottetown "Quebec City"
+                     Toronto Winnipeg Regina Edmonton Victoria )
+asearch captials Hal && printf "%s\n" "${_asearch_elements[@]}"
+asearch captials ict && printf "%s\n" "${_asearch_elements[@]}"
+
+unset array
+while read line
+do
+   array+=( "$line" )
+done < "$kjv"
+
+IFS=$'\n'
+array=( $(cat "$kjv") )
+
+
+# Page 162
+
+array=( < "$kjv" )
+
+mapfile -t array < "$kjv"
+
+# Page 163
+
+mapfile -t exodus < <(grep ^Exodus: "$kjv")
+mapfile -t books < <(cut -d: -f1 "$kjv" | uniq)
+
+declare -A chessboard
+chessboard["a1"]=R
+chessboard["a2"]=P
+: ... 60 squares skipped
+chessboard["g8"]=r
+chessboard["h8"]=b
+
+
+chessboard=(
+    RNBQKBRN
+    PPPPPPPP
+  "          "
+  "          "
+  "          "
+  "          "
+    pppppppp
+    rnbqkbnr
+)
+
+chessboardarray=(
+R N B Q K B R N
+P P P P P P P P
+"" "" "" "" "" "" "" ""
+"" "" "" "" "" "" "" ""
+"" "" "" "" "" "" "" ""
+"" "" "" "" "" "" "" ""
+p p p p p p p p
+r n b q k b n r
+)
+
+
+# Page 164
+
+. stringgrid-funcs
+initgrid ttt 3
+sa "$ttt"
+
+# Page 165
+
+gridindex 2 3    ## gridsize=3
+echo "$_GRIDINDEX"
+
+# Page 166
+
+putgrid ttt 1 2 X
+sa "$ttt"
+
+
+gridsize=8
+chessboard="RNBQKBRNPPPPPPPP pppppppprnbqkbnr"
+getgrid chessboard 1 5 e1
+sa "$e1"
+
+# Page 167
+
+gridsize=3
+putgrid ttt 2 2 O
+showgrid ttt
+
+
+gridsize=8
+chessboard="RNBQKBRNPPPPPPPP pppppppprnbqkbnr"
+putgrid chessboard 2 6 ' '
+putgrid chessboard 4 6 P
+rshowgrid chessboard
+
+# Page 168
+
+rshowgrid chessboard | sed 's/./& /g'
+
+ttt=( "" X "" "" O "" "" X "" )
+
+fmt="
+     |   |
+   %1s | %1s | %1s
+ ----+---+----
+   %1s | %1s | %1s
+ ----+---+----
+   %1s | %1s | %1s
+     |   |
+"
+
+
+printf "$fmt" "${ttt[@]}"
+
+
+# Page 169
+
+fmt="
+       _/     _/
+    %1s _/ %1s _/ %1s
+       _/     _/
+ _/_/_/_/_/_/_/_/_/_/
+       _/     _/
+    %1s _/ %1s _/ %1s
+       _/     _/
+ _/_/_/_/_/_/_/_/_/_/
+       _/     _/
+    %1s _/ %1s _/ %1s
+       _/     _/
+"
+
+# Page 172
+
+grep 'bash$' /etc/passwd |
+while read line
+do
+   : perform some checking here
+done
+
+grep 'bash$' /etc/passwd |
+while IFS=: read user passwd uid gid name homedir shell
+do
+   printf "%16s: %s\n" \
+       User        "$user" \
+       Password    "$passwd" \
+       "User ID"   "$uid" \
+       "Group ID"  "$gid" \
+       Name        "$name" \
+ "Home directory"  "$homedir" \
+       Shell       "$shell"
+   read < /dev/tty
+done
+
+
+record=root:x:0:0:root:/root:/bin/bash
+
+for var in user passwd uid gid name homedir shell
+do
+   eval "$var=\${record%%:*}" ## extract the first field
+   record=${record#*:}        ## and take it off the record
+done
+
+
+# Page 173
+
+IFS=:
+set -f
+data=( $record )
+user=0
+passwd=1
+uid=2
+gid=3
+name=4
+homedir=5
+shell=6
+
+ echo;printf "%16s: %s\n" \
+      User       "${data[$user]}" \
+      Password   "${data[$passwd]}" \
+      "User ID" "${data[$uid]}" \
+      "Group ID" "${data[$gid]}" \
+      Name       "${data[$name]}" \
+"Home directory" "${data[$homedir]}" \
+      Shell      "${data[$shell]}"
+
+
+# Page 174
+
+split_record "$record" : user passwd uid gid name homedir shell
+sa "$user" "$passwd" "$uid" "$gid" "$name" "$homedir" "$shell"
+
+
+# Page 175
+
+line="John            123 Fourth Street   Toronto     Canada               "
+for nw in name=15 address=20 city=12 country=22
+do
+   var=${nw%%=*}                 ## variable name precedes the equals sign
+   width=${nw#*=}                ## field width follows it
+   eval "$var=\${line:0:width}" ## extract field
+   line=${line:width}            ## remove field from the record
+done
+
+

@@ -1,0 +1,107 @@
+
+
+# Listing 13-6a. initagrid, Initialize a Grid Array
+
+initagrid() #@ Fill N x N grid with supplied data (or placeholders if none)
+{            #@ USAGE: initgrid gridname size [character ...]
+  ## If a required parameter is missing, it's a programming error, so exit
+  local grid gridname=${1:?} char=${3:- } size
+  export agridsize=${2:?}              ## set agridsize globally
+  size=$(( $agridsize * $agridsize )) ## total number of elements in grid
+  shift 2         ## Remove first two arguments, gridname and agridsize
+  grid=( "$@" )   ## What's left goes into the array
+  while [ ${#grid[@]} -lt $size ]
+  do
+     grid+=( "" )
+  done
+  eval "$gridname=( \"\${grid[@]}\" )"
+}
+
+
+# Listing 13-6b. putagrid, Replace a Grid Element
+
+putagrid() #@ Replace character in grid at row and column
+{           #@ USAGE: putagrid gridname row column char
+  local left right pos grid gridname=$1
+  local value=${4:?} index
+  gridindex ${2:?} ${3:?} "$agridsize" index    ## calculate the index
+  eval "$gridname[index]=\$value"               ## assign the value
+}
+
+
+# Listing 13-6c. getagrid, Extract an Entry from a Grid
+
+getagrid() #@ Get entry from grid in row Y, column X
+{          #@ USAGE: getagrid gridname row column var
+  : ${1:?} ${2:?} ${3:?} ${4:?}
+  local grid
+  eval "grid=( \"\${$1[@]}\" )"
+  gridindex "$2" "$3"
+  eval "$4=\${grid[$_GRIDINDEX]}"
+}
+
+
+# Listing 13-6d. showagrid, Description
+
+showagrid() #@ print grid to stdout
+{           #@ USAGE: showagrid gridname format [agridsize]
+  local gridname=${1:?} grid
+  local format=${2:?}
+  local agridsize=${3:-${agridsize:?}} row
+  eval "grid=( \"\${$1[@]}\" )"
+  printf "$format" "${grid[@]}"
+}
+
+
+# Listing 13-6e. rshowagrid, Description
+
+rshowagrid() #@ print grid to stdout in reverse order
+{              #@ USAGE: rshowagrid gridname format [agridsize]
+  local format=${2:?} temp grid
+  local agridsize=${3:-$agridsize} row
+  eval "grid=( \"\${$1[@]}\" )"
+  while [ "${#grid[@]}" -gt 0 ]
+  do
+     ## Note space before minus sign
+     ## to distinguish it from default value substitution
+     printf "$format" "${grid[@]: -$agridsize}"
+     grid=( "${grid[@]:0:${#grid[@]}-$agridsize}" )
+  done
+}
+
+
+# Listing 13-7a. split_passwd, Split a Record from /etc/passwd into Fields and Assign to Variables
+
+split_passwd() #@ USAGE: split_passwd RECORD
+{
+  local opts=$-      ## store current shell options
+  local IFS=:
+  local record=${1:?} array
+
+  set -f                                       ## Turn off filename expansion
+  array=( $record )                            ## Split record into array
+  case $opts in *f*);; *) set +f;; esac        ## Turn on expansion if previously set
+  user=${array[0]}
+  passwd=${array[1]}
+  uid=${array[2]}
+  gid=${array[3]}
+  name=${array[4]}
+  homedir=${array[5]}
+  shell=${array[6]}
+}
+
+
+# Listing 13-8. split_record, Split a Record by Reading Variables
+
+split_record() #@ USAGE parse_record record delimiter var ...
+{
+  local record=${1:?} IFS=${2:?} ## record and delimiter must be provided
+  : ${3:?}                           ## at least one variable is required
+  shift 2                            ## remove record and delimiter, leaving variables
+
+  ## Read record into a list of variables using a 'here document'
+  read "$@" <<.
+$record
+.
+}
+

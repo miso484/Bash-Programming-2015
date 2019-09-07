@@ -1,0 +1,186 @@
+
+# Listing 7-1. repeat, Repeat a String N Times
+
+_repeat()
+{
+  #@ USAGE: _repeat string number
+  _REPEAT=$1
+  while [ ${#_REPEAT} -lt $2 ] ## Loop until string exceeds desired length
+  do
+     _REPEAT=$_REPEAT$_REPEAT$_REPEAT ## 3 seems to be the optimum number
+  done
+  _REPEAT=${_REPEAT:0:$2} ## Trim to desired length
+}
+
+repeat()
+{
+  _repeat "$@"
+  printf "%s\n" "$_REPEAT"
+}
+
+
+# Listing 7-2. alert, Print a Warning Message with a Border and a Beep
+
+alert() #@ USAGE: alert message border
+{
+  _repeat "${2:-#}" $(( ${#1} + 8 ))
+  printf '\a%s\n' "$_REPEAT" ## \a = BEL
+  printf '%2.2s %s %2.2s\n' "$_REPEAT" "$1" "$_REPEAT"
+  printf '%s\n' "$_REPEAT"
+}
+
+
+# Listing 7-3. revstr, Reverse the Order of a String; Store Result in _REVSTR
+
+_revstr() #@ USAGE: revstr STRING
+{
+  var=$1
+  _REVSTR=
+  while [ -n "$var" ]
+  do
+     temp=${var#?}
+     _REVSTR=$temp${var%"$temp"}
+     var=$temp
+  done
+}
+
+
+# Listing 7-4. to_upper, Convert First Character of $1 to Uppercase
+
+to_upper()
+     case $1  in
+          a*) _UPR=A ;;  b*) _UPR=B   ;; c*) _UPR=C ;; d*) _UPR=D ;;
+          e*) _UPR=E ;;  f*) _UPR=F   ;; g*) _UPR=G ;; h*) _UPR=H ;;
+          i*) _UPR=I ;;  j*) _UPR=J   ;; k*) _UPR=K ;; l*) _UPR=L ;;
+          m*) _UPR=M ;;  n*) _UPR=N   ;; o*) _UPR=O ;; p*) _UPR=P ;;
+          q*) _UPR=Q ;;  r*) _UPR=R   ;; s*) _UPR=S ;; t*) _UPR=T ;;
+          u*) _UPR=U ;;  v*) _UPR=V   ;; w*) _UPR=W ;; x*) _UPR=X ;;
+          y*) _UPR=Y ;;  z*) _UPR=Z   ;;  *) _UPR=${1%${1#?}} ;;
+     esac
+
+
+# Listing 7-5. upword, Convert Word to Uppercase
+
+_upword() #@ USAGE: upword STRING
+{
+  local word=$1
+  while [ -n "$word" ] ## loop until nothing is left in $word
+  do
+     to_upper "$word"
+     _UPWORD=$_UPWORD$_UPR
+     word=${word#?} ## remove the first character from $word
+  done
+}
+upword()
+{
+  _upword "$@"
+  printf "%s\n" "$_UPWORD"
+}
+
+
+# Listing 7-6. validname, Check $1 for a Valid Variable or Function Name
+
+validname() #@ USAGE: validname varname
+ case $1 in
+   ## doesn't begin with letter or underscore, or
+   ## contains something not letter, number, or underscore
+   [!a-zA-Z_]* | *[!a-zA-z0-9_]* ) return 1;;
+ esac
+
+
+# Listing 7-7. insert_string, Insert One String into Another at a Specified Location
+
+_insert_string() #@ USAGE: _insert_string STRING INSERTION [POSITION]
+{
+  local insert_string_dflt=2                       ## default insert location
+  local string=$1                                  ## container string
+  local i_string=$2                                ## string to be inserted
+  local i_pos=${3:-${insert_string_dflt:-2}} ## insert location
+  local left right                                 ## before and after strings
+  left=${string:0:$(( $i_pos - 1 ))}               ## string to left of insert
+  right=${string:$(( $i_pos ­ 1 ))}                ## string to right of insert
+  _insert_string=$left$i_string$right              ## build new string
+}
+
+insert_string()
+{
+  _insert_string "$@" && printf "%s\n" "$_insert_string"
+}
+
+
+# Listing 7-8. overlay, Place One String Over the Top of Another
+
+_overlay() #@ USAGE: _overlay STRING SUBSTRING START
+{            #@ RESULT: in $_OVERLAY
+  local string=$1
+  local sub=$2
+  local start=$3
+  local left right
+  left=${string:0:start-1}            ## See note below
+  right=${string:start+${#sub}-1}
+  _OVERLAY=$left$sub$right
+}
+
+overlay() #@ USAGE: overlay STRING SUBSTRING START
+{
+  _overlay "$@" && printf "%s\n" "$_OVERLAY"
+}
+
+
+# Listing 7-9. trim, Trim Unwanted Characters
+
+_trim() #@ Trim spaces (or character in $2) from $1
+{
+  local trim_string
+  _TRIM=$1
+  trim_string=${_TRIM##*[!${2:- }]}
+  _TRIM=${_TRIM%"$trim_string"}
+  trim_string=${_TRIM%%[!${2:- }]*}
+  _TRIM=${_TRIM#"$trim_string"}
+}
+
+trim() #@ Trim spaces (or character in $2) from $1 and print the result
+{
+  _trim "$@" && printf "%s\n" "$_TRIM"
+}
+
+
+# Listing 7-10. index, Return Position of One String Inside Another
+
+_index() #@ Store position of $2 in $1 in $_INDEX
+{
+  local idx
+  case $1 in
+     "") _INDEX=0; return 1 ;;
+     *"$2"*) ## extract up to beginning of the matching portion
+              idx=${1%%"$2"*}
+              ## the starting position is one more than the length
+            _INDEX=$(( ${#idx} + 1 )) ;;
+     *) _INDEX=0; return 1 ;;
+  esac
+}
+
+index()
+{
+  _index "$@"
+  printf "%d\n" "$_INDEX"
+}
+
+
+# Listing 7-11. month2num, Convert a Month Name to Its Ordinal Number
+
+_month2num()
+{
+  local months=JAN.FEB.MAR.APR.MAY.JUN.JUL.AUG.SEP.OCT.NOV.DEC
+  _upword "${1:0:3}" ## take first three letters of $1 and convert to uppercase
+  _index "$months" "$_UPWORD" || return 1
+  _MONTH2NUM=$(( $_INDEX / 4 + 1 ))
+}
+
+month2num()
+{
+  _month2num "$@" &&
+  printf "%s\n" "$_MONTH2NUM"
+}
+
+

@@ -1,0 +1,173 @@
+
+# Page 67
+
+if ! echo ${PATH} | grep -q /usr/games
+then
+   PATH=$PATH:/usr/games
+fi
+
+
+case :$PATH: in
+  *:/usr/games:*);;
+  *) PATH=$PATH:/usr/games ;;
+esac
+
+PATH=$PATH:$HOME/bin
+
+var=$HOME/bin 
+var="$HOME/bin # but this is"
+
+# Page 68
+
+var=abc
+var+=xyz
+echo "$var"
+
+
+_repeat()
+{
+  #@ USAGE: _repeat string number
+  _REPEAT=
+  while [ ${#_REPEAT} -lt $2 ]
+  do
+     _REPEAT=$_REPEAT$1
+  done
+}
+
+
+_repeat % 40
+printf "%s\n" "$_REPEAT"
+
+
+# Page 69
+
+alert "Do you really want to delete all your files?"
+
+alert "Danger, Will Robinson" $
+
+var=strip
+allbutfirst=${var#?}
+allbutlast=${var%?}
+sa "$allbutfirst" "$allbutlast"
+
+first=${var%"$allbutfirst"}
+last=${var#"$allbutlast"}
+sa "$first" "$last"
+
+# Page 70
+
+printf -v first "%c" "$var"
+
+while [ -n "$var" ]
+do
+   temp=${var#?}        ## everything but the first character
+   char=${var%"$temp"} ## remove everything but the first character
+   : do something with "$char"
+   var=$temp            ## assign truncated value to var
+done
+
+echo abcdefgh | tr ceh CEH
+echo abcdefgh | tr ceh HEC 
+
+echo touchdown | tr 'a-z' 'A-Z'
+
+# Page 71
+
+word=function
+to_upper "$word"
+printf "%c%s\n" "$_UPR" "${word#?}"
+
+# Page 72
+
+read ok
+case $ok in
+  y|Y) echo "Great!" ;;
+  n|N) echo Good-bye
+        exit 1
+        ;;
+  *) echo Invalid entry ;;
+esac
+
+
+read ok
+case $ok in
+  [yY]) echo "Great!" ;;
+  [nN]) echo Good-bye
+        exit 1
+        ;;
+  *) echo Invalid entry ;;
+esac
+
+
+read monthname
+case $monthname in ## convert $monthname to number
+  [Jj][Aa][Nn]*) month=1 ;;
+  [Ff][Ee][Bb]*) month=2 ;;
+  ## ...put the rest of the year here
+  [Dd][Ee][Cc]*) month=12 ;;
+  [1-9]|1[0-2]) month=$monthname ;; ## accept number if entered
+  *) echo "Invalid month: $monthname" >&2 ;;
+esac
+
+
+_upword "$monthname"
+case $_UPWORD in ## convert $monthname to number
+  JAN*) month=1 ;;
+  FEB*) month=2 ;;
+  ## ...put the rest of the year here
+# Page 73
+  DEC*) month=12 ;;
+  [1-9]|1[0-2]) month=$monthname ;; ## accept number if entered
+  *) echo "Invalid month: $monthname" >&2 ;;
+esac
+
+_upword()
+{
+  _UPWORD=${1^^}
+}
+
+
+for name in name1 2var first.name first_name last-name
+do
+   validname "$name" && echo " valid: $name" || echo "invalid: $name"
+done
+
+insert_string poplar u 4
+insert_string show ad 3
+insert_string tail ops
+
+
+# Page 75
+
+ {
+ overlay pony b 1
+ overlay pony u 2
+ overlay pony s 3
+ overlay pony d 4
+ }
+
+
+var="      John    "
+while :    ## infinite loop
+do
+   case $var in
+       ' '*) var=${var#?} ;; ## if $var begins with a space remove it
+       *' ') var=${var%?} ;; ## if $var ends with a space remove it
+# Page 76
+       *) break ;; ## no more leading or trailing spaces, so exit the loop
+  esac
+done
+
+
+rightspaces=${var##*[! ]}
+
+var=${var%"$rightspaces"}
+
+leftspaces=${var%%[! ]*}
+
+var=${var#"$leftspaces"}
+
+trim " S p a c e d o u t "
+
+trim "0002367.45000" 0
+

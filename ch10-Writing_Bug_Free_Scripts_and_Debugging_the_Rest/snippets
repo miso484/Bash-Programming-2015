@@ -1,0 +1,51 @@
+
+# Page 118
+
+echo "user odad odd" > ftp.txt
+echo "prompt" >> ftp.txt
+echo "cd $i" >> ftp.txt
+echo "ls -ltr" >> ftp.txt
+echo "bye" >> ftp.txt
+
+
+{
+  echo "user odad odd"
+  echo "prompt"
+  echo "cd $i"
+  echo "ls -ltr"
+  echo "bye"
+} > ftp.txt
+
+
+# Page 120
+
+bash -n wfe
+
+wfe
+
+chmod +x /home/chris/bin/wfe
+wfe
+
+mkdir $HOME/words &&
+cd $HOME/words &&
+wget http://cfaj.freeshell.org/wordfinder/singlewords &&
+wget http://cfaj.freeshell.org/wordfinder/Compounds
+
+# Page 121
+
+dict=$HOME/words
+
+wfe
+
+wfe drow
+
+# Page 122
+
+export PS4='+ $LINENO: '
+set -x
+
+wfe drow
+
+wfe -c drow
+
+

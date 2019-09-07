@@ -1,0 +1,17 @@
+
+# Listing 11-10. pr1, Script to Print Its Arguments One to a Line
+
+while getopts wW: opt
+do
+   case $opt in
+     w) w=
+        shift
+        ;;
+     W) w=$OPTARG ;;
+     *) w=-.${COLUMNS:-80} ;;
+  esac
+done
+shift $(( $OPTIND - 1 ))
+
+printf "%${w}s\n" "$@"
+

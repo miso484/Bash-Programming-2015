@@ -1,0 +1,5 @@
+
+while read name phone
+do
+   printf "Name: %-10s\tPhone: %s\n" "$name" "$phone"
+done < "$file"

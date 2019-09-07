@@ -1,0 +1,13 @@
+
+# Page 
+
+tput cup 9 19
+
+tput cm 19 9
+
+# Page 
+
+cu_row_col=$'\e[%d;%dH'
+printf "$cu_row_col" 5 10 ## Row 5, column 10
+echo "Here I am!"
+

@@ -1,0 +1,8 @@
+
+# Listing 12-6. Parsing Configuration File
+
+IFS=$'\n'
+file=words.cfg
+settings=( $( < "$file") )             ## store file in array, 1 line per element
+eval "${settings[@]%%#*}"              ## extract and execute the assignments
+comments=( "${settings[@]#*## }" )     ## store comments in array

@@ -1,0 +1,10 @@
+
+# Listing 12-1. Example of Initialized Default Variables
+
+## File locations
+dict=/usr/share/dict
+wordfile=$dict/singlewords
+compoundfile=$dict/Compounds
+
+## Default is not to show compound words
+compounds=no

@@ -1,0 +1,11 @@
+
+# Listing 15-3. keycapture, Read and Display Keystrokes Until Q Is Pressed
+
+. key-funcs                                ## source the library
+
+while :                                    ## infinite loop
+do
+   get_key key
+   sa "$key"                               ## the sa command is from previous chapters
+   case $key in q|Q) break;; esac
+done

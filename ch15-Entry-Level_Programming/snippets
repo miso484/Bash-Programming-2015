@@ -1,0 +1,69 @@
+
+# Page 179
+
+stty -echo -icanon min 1
+_KEY=$(dd count=1 bs=1 2>/dev/null)
+stty echo icanon
+
+trap 'stty echo icanon' EXIT
+
+# Page 181
+
+while :
+do
+   _key
+   case $_KEY in
+        $ESC) _keys
+              _KEY=$ESC$_KEYS
+              ;;
+   esac
+   printf "%s" "$_KEY" | hexdump -C | {
+                 read a b
+                 printf "   %s\n" "$b"
+               }
+   case "$_KEY" in q) break ;; esac
+done
+
+# Page 186
+
+history -s Genesis
+history -s Exodus
+
+
+cut -d: -f1 "$kjv" | uniq | head -5 > pentateuch
+history -r pentateuch
+
+
+read -ep "Enter variable name: " var
+read -ep "Enter value: " val
+eval "$var=\$val"
+
+# rm -rf *;name=whatever
+
+validname "$var" && eval "$var=\$val" || echo Bad variable name >&2
+
+
+# Page 189
+
+printf "\e[?9h"
+read x
+printf "$x" | hexdump -C
+
+read -n6 x
+
+m1=${x#???}
+m2=${x#????}
+m3=${x#?????}
+
+printf -v mb "%d" "'$m1"
+printf -v mx "%d" "'$m2"
+printf -v my "%d" "'$m3"
+
+# Page 190
+
+[ $mx -lt 0 ] && mx=$(( 255 + $mx ))
+[ $my -lt 0 ] && my=$(( 255 + $my ))
+BUTTON=$(( ($mb & 3) + 1 ))
+MOUSEX=$(( $mx - 32 ))
+MOUSEY=$(( $my - 32 ))
+

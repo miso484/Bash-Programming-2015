@@ -1,0 +1,12 @@
+
+# Listing 3-2. Prompt for a Number and Check That It Is No Greater Than Ten
+
+printf "Enter a number no greater than 10: "
+read number
+if [ "$number" -gt 10 ]
+then
+     printf "%d is too big\n" "$number" >&2
+     exit 1
+else
+     printf "You entered %d\n" "$number"
+fi

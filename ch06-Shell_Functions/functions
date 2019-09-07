@@ -1,0 +1,80 @@
+
+
+# Listing 6-1. isvalidip, Check Argument for Valid Dotted-Quad IP Address
+
+isvalidip() #@ USAGE: isvalidip DOTTED-QUAD
+{
+  case $1 in
+     ## reject the following:
+     ## empty string
+     ## anything other than digits and dots
+     ## anything not ending in a digit
+     "" | *[!0-9.]* | *[!0-9]) return 1 ;;
+  esac
+
+  ## Change IFS to a dot, but only in this function
+  local IFS=.
+
+  ## Place the IP address into the positional parameters;
+  ## after word splitting each element becomes a parameter
+  set -- $1
+  [ $# -eq 4 ] && ## must be four parameters
+                  ## each must be less than 256
+
+  ## A default of 666 (which is invalid) is used if a parameter is empty
+  ## All four parameters must pass the test
+  [ ${1:-666} -le 255 ] && [ ${2:-666} -le 255 ] &&
+  [ ${3:-666} -le 255 ] && [ ${4:-666} -le 255 ]
+}
+
+
+# Listing 6-2. valint, Check for Valid Integer
+
+valint() #@ USAGE: valint INTEGER
+  case ${1#-} in         ## Leading hyphen removed to accept negative numbers
+     *[!0-9]*) false;; ## the string contains a non-digit character
+     *) true ;;          ## the whole number, and nothing but the number
+  esac
+
+
+# Listing 6-3. rangecheck, Check Whether an Integer Is Within a Specified Range
+
+rangecheck() #@ USAGE: rangecheck int [low [high]]
+  if [ "$1" -lt ${2:-10} ]
+  then
+     return 1
+  elif [ "$1" -gt ${3:-20} ]
+  then
+     return 2
+  else
+     return 0
+  fi
+
+
+# Listing 6-4. uinfo, Print Information About the Environment
+
+uinfo() #@ USAGE: uinfo [file]
+{
+  printf "%12s: %s\n" \
+     USER     "${USER:-No value assigned}" \
+     PWD      "${PWD:-No value assigned}" \
+     COLUMNS "${COLUMNS:-No value assigned}" \
+     LINES "${LINES:-No value assigned}" \
+     SHELL "${SHELL:-No value assigned}" \
+     HOME     "${HOME:-No value assigned}" \
+     TERM     "${TERM:-No value assigned}"
+} > ${1:-/dev/fd/1}
+
+
+# Listing 6-5. _max3, Sort Three Integers
+
+_max3() { #@   Sort  3 integers and   store in $_MAX3, $_MID3 and $_MIN3
+     [ $# -ne  3 ]   && return 5
+     [ $1 -gt  $2 ]  && { set -- $2   $1 $3; }
+     [ $2 -gt  $3 ]  && { set -- $1   $3 $2; }
+     [ $1 -gt  $2 ]  && { set -- $2   $1 $3; }
+     _MAX3=$3
+     _MID3=$2
+     _MIN3=$1
+}
+

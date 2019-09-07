@@ -1,0 +1,134 @@
+
+# Page 19
+
+printf "%v\n"
+
+mkdir /qwerty
+echo $?
+
+# Page 20
+
+test -f /etc/fstab    ## true if a regular file
+[ -f /etc/fstab ]
+test -h /etc/rc.local ## true if a symbolic link
+[ -h /etc/rc.local ]
+[ -x $HOME/bin/hw ]   ## true if you can execute the file
+
+
+test 1 -eq 1
+echo $?
+[ 2 -eq 1 ]
+echo $?
+
+[ 2 -ne 1 ]
+echo $?
+
+test "$a" = "$b"
+[ "$q" != "$b" ]
+
+# Page 21
+
+[ -z "" ]
+echo $?
+test -n ""
+echo $?
+
+str1=abc
+str2=def
+test "$str1" \< "$str2"
+echo $?
+test "$str1" \> "$str2"
+echo $?
+
+test -f /path/to/file -a $test -eq 1
+test -x bin/file -o $test -gt 1
+
+string=whatever
+[[ $string =~ h[aeiou] ]]
+echo $?
+
+# Page 22
+
+[[ $string =~ h[sdfghjkl] ]]
+echo $?
+
+test $(( $a - 2 )) -ne 0
+
+# Page 24
+
+test -d "$directory" && cd "$directory"
+
+cd "$HOME/bin" || exit 1
+
+mkdir "$HOME/bin" && cd "$HOME/bin" || exit 1
+
+if [ -d "$dir" ] && cd "$dir"
+then
+     echo "$PWD"
+fi
+
+
+case WORD in
+  PATTERN) COMMANDS ;;
+  PATTERN) COMMANDS ;; ## optional
+esac
+
+# Page 25
+
+n=1
+while [ $n -le 10 ]
+do
+   echo "$n"
+   n=$(( $n + 1 ))
+done
+
+while true ## : can be used in place of true
+do
+   read x
+done
+
+# Page 26
+
+while IFS= read -r line       # Internal Field Separator
+do
+   : do something with "$line"
+done < FILENAME
+
+n=1
+until [ $n -gt 10 ]
+do
+   echo "$n"
+   n=$(( $n + 1 ))
+done
+
+for var in Canada USA Mexico
+do
+   printf "%s\n" "$var"
+done
+
+for (( n=1; n<=10; ++n ))
+do
+   echo "$n"
+done
+
+
+while :
+do
+   read x
+   [ -z "$x" ] && break
+done
+
+
+# Page 27
+
+for n in {1..9} ## See Brace expansion in Chapter 4
+do
+   x=$RANDOM
+   [ $x -le 20000 ] && continue
+   echo "n=$n x=$x"
+done
+
+
+
+
+

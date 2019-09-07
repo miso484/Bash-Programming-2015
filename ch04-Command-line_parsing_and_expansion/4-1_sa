@@ -1,0 +1,5 @@
+
+## Listing 4-1. sa; Displaying Command-Line Arguments
+pre=:
+post=:
+printf "$pre%s$post\n" "$@"

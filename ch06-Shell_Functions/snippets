@@ -1,0 +1,32 @@
+
+# Page 
+
+. isvalidip-func
+for ip in 127.0.0.1 168.260.0.234 1.2.3.4 123.1OO.34.21 204.225.122.150
+do
+   if isvalidip "$ip"
+   then
+      printf "%15s: valid\n" "$ip"
+   else
+      printf "%15s: invalid\n" "$ip"
+   fi
+done
+
+# Page 
+
+funky() ( name=nobody; echo "name = $name" )
+name=Rumpelstiltskin
+funky
+echo "name = $name"
+
+
+uinfo
+
+cd; uinfo > $HOME/tmp/info
+cat $HOME/tmp/info
+
+
+info=$( uinfo )
+
+. date-funcs
+

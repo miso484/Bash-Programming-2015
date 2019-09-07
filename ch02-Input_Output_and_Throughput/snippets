@@ -1,0 +1,94 @@
+
+# Page 7
+
+hello John
+
+hello Susan
+
+# Page 8
+
+echo 1 '2   3'   4 5
+echo -n Now\ is the time
+printf "%s %s\n" one two three
+
+# Page 9
+
+bash --version
+
+echo The quick brown fox
+
+echo -n No newline
+
+# Page 10
+
+printf "Q\t\141\n\x42\n"
+
+printf "%s\n" Print arguments on "separate lines"
+
+# Page 11
+
+printf "%b\n" "Hello\nworld" "12\tword"
+
+printf "%d\n" 23 45 56.78 0xff 011
+
+printf "%f\n" 12.34 23 56.789 1.2345678
+
+printf "%e\n" 12.34 23 56.789 123.45678
+
+printf "color: #%02x%02x%02;x;\n" 65 105 225
+
+# Page 12
+
+printf "%8s %-15s:\n" first second third fourth fifth sixth
+
+printf "%04d\n" 12 23 56 123 255
+
+printf "%12.4s %9.2f\n" John 2 Jackson 4.579 Walter 2.9
+
+# Page 13
+
+printf -v num4 "%04d" 4
+printf "%s\n" "$num4"
+
+# page 14
+
+printf "" > FILENAME
+
+> FILENAME
+
+echo exit 0 >> bin/hw
+
+printf '%s\n%v\n' OK? Oops! > FILE 2> ERRORFILE
+cat ERRORFILE
+
+printf '%s\n%v\n' OK? Oops! 2>/dev/null
+
+printf '%s\n%v\n' OK? Oops! > FILE 2>&1
+
+printf '%s\n%v\n' OK? Oops! 2>&1 > FILE
+
+# Page 15
+
+tr ,H wY < bin/hw
+
+read var
+
+read a b c d
+echo $a
+echo $b
+echo $c
+echo $d
+
+read var < FILENAME
+
+printf "%s\n" "$RANDOM" "$RANDOM" "$RANDOM" "$RANDOM" | tee FILENAME
+
+
+# Page 16
+
+cat FILENAME
+
+date=`date`
+
+date=$( date )
+

@@ -1,0 +1,7 @@
+
+# Listing 14-5. screen-demo3
+
+. screenfuncs
+printf "$cls"
+put_block_at 3 12 First Second Third Fourth Fifth
+put_block_at 2 50 January February March April May June July

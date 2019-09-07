@@ -1,0 +1,11 @@
+
+# Listing 8-2. kjvfirsts-awk, Print Book, Chapter, Verse, and First Words from the KJV
+
+awk -F: ' ## -F: sets the field delimiter to a colon
+{
+  ## split the fourth field into an array of words
+  split($4,words," ")
+
+  ## printf the first three fields and the first word of the fourth
+  printf "%s %s:%s %s\n", $1, $2, $3, words[1]
+}' "$kjv"

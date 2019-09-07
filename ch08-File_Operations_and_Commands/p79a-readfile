@@ -1,0 +1,5 @@
+
+while read ## no name supplied so the variable REPLY is used
+do
+   : do something with "$REPLY" here
+done < "$kjv"

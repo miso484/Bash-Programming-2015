@@ -1,0 +1,65 @@
+
+
+die() #@ DESCRIPTION: print error message and exit with supplied return code
+{     #@ USAGE: die STATUS [MESSAGE]
+  error=$1
+  shift
+  [ -n "$*" ] printf "%s\n" "$*" >&2
+  exit "$error"
+}
+
+usage() #@ DESCRIPTION: print usage information
+{       #@ USAGE: usage
+        #@ REQUIRES: variable defined: $scriptname
+  printf "%s - %s\n" "$scriptname" "$description"
+  printf "USAGE: %s\n" "$usage"
+}
+
+version() #@ DESCRIPTION: print version information
+{          #@ USAGE: version
+           #@ REQUIRES: variables defined: $scriptname, $author and $version
+  printf "%s version %s\n" "$scriptname" "$version"
+  printf "by %s, %d\n" "$author" "${date_of_creation%%-*"
+}
+
+cd() #@ DESCRIPTION: change directory and display 10 most recent files
+{    #@ USAGE: cd DIR
+  builtin cd "$@" || return 1 ## don't call function recursively
+  ls -t | head
+}
+
+split_square() #@ DESCRIPTION: convert SAN square to numeric rank and file
+{               #@ USAGE: split_square SAN-SQUARE
+  local square=$1
+  rank=${square#?}
+  case $square in
+    a[1-8]) file=1;; ## Conversion of file to number
+    b[1-8]) file=2;; ## and checking that the rank is
+    c[1-8]) file=3;; ## a valid number are done in a
+    d[1-8]) file=4;; ## single look-up
+    e[1-8]) file=5;;
+    f[1-8]) file=6;; ## If the rank is not valid,
+    g[1-8]) file=7;; ## it falls through to the default
+    h[1-8]) file=8;;
+    *) file=0
+       rank=0
+       return 1       ## Not a valid square
+       ;;
+  esac
+  return 0
+}
+
+test_split_square()
+{
+  local f r
+  for f in {a..i}
+  do
+     for r in {1..9}
+     do
+        split_square "$f$r"
+        printf "$f$r %d-%d " "$file" "$rank"
+     done
+     echo
+  done
+}
+

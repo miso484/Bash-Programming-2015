@@ -1,0 +1,121 @@
+
+# Page 30
+
+sa \ this "is a" 'demonstration of' \ quotes\ and\ escapes
+
+sa "a double-quoted single quote, '" "a double-quoted double quote, \""
+
+sa 'a single-quoted double quotation mark, "'
+
+sa "First argument "'still the first argument'
+
+echo $'\'line1\'\n\'line2\''
+
+sa "Argument containing
+a newline"
+
+# Page 31
+
+sa {one,two,three}
+
+sa {1..3} ## added in bash3.0
+
+sa {a..c}
+
+sa pre{d,l}ate
+
+sa {{1..3},{a..c}}
+
+sa {1..3}{a..c}
+
+# Page 32
+
+sa {01..13..3}
+
+sa {a..h..3}
+
+sa ~
+
+sa ~root ~chris
+
+sa "~" "~root"
+
+sa ~qwerty
+
+# Page 33
+
+var=whatever
+sa "$var"
+
+var=qwerty
+sa "${var}"
+
+first=Jane
+last=Johnson
+sa "$first_$last" "${first}_$last"
+
+sa "$(( 1 + 12 ))" "$(( 12 * 13 ))" "$(( 16 / 4 ))" "$(( 6 - 9 ))"
+
+# Page 34
+
+sa "$(( 3 + 4 * 5 ))" "$(( (3 + 4) * 5 ))"
+
+sa "$(( 13 % 5 ))"
+
+# Page 35
+
+wc -l $( date +%Y-%m-%d ).log
+
+wc -l `date +%Y-%m-%d`.log
+
+# Page 36
+
+var="this is a multiword value"
+sa $var "$var"
+
+var='    spaced
+ out   '
+sa $var
+
+IFS=' :'
+var="qwerty : uiop : :: er " ## : :: delimits 2 empty fields
+sa $var
+
+IFS=:
+var="qwerty : uiop : :: er "
+sa $var
+
+# Page 37
+
+cd "$HOME/bin"
+sa h*
+sa *k
+
+sa ?a*
+
+sa <(ls -l) >(pr -Tn)
+
+# Page 38
+
+ls -l |
+while read perms links owner group size month day time file
+do
+   totalsize=$(( ${totalsize:=0} + ${size:-0} ))
+done
+ echo ${totalsize-unset} ## print "unset" if variable is not set
+
+myscript -a -f filename John -x Jane
+
+# Page 40
+
+parseopts
+echo $?
+
+parseopts -v
+
+parseopts -x
+
+parseopts -vf qwerty; echo $?
+
+parseopts -vf ~/.bashrc -­ -x
+

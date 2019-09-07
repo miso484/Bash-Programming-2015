@@ -1,0 +1,8 @@
+#!/bin/bash
+#: Title       : hw
+#: Date        : 2008-11-26
+#: Author      : "Chris F.A. Johnson" <shell@cfajohnson.com>
+#: Version     : 1.0
+#: Description : print Hello, World!
+#: Options     : None
+printf "%s\n" "Hello, World!"

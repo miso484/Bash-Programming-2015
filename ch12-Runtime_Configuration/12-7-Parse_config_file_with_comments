@@ -1,0 +1,11 @@
+
+# Listing 12-7. Parsing Configuration File with Comments
+
+while read assignment x comment
+do
+   if [ -n "$assignment" ]
+   then
+      printf "%20s: %s\n" "${assignment#*=}" "$comment"
+      eval "$assignment"
+   fi
+done < "$file"

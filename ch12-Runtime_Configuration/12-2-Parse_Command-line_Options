@@ -1,0 +1,12 @@
+
+# Listing 12-2. Parse Command-Line Options
+
+while getopts d:w:f:c var
+do
+   case "$var" in
+     c) compounds=1 ;;
+     d) dict=$OPTARG ;;
+     w) wordfile=$OPTARG ;;
+     f) compoundfile=$OPTARG ;;
+   esac
+done

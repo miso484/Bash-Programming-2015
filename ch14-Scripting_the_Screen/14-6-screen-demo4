@@ -1,0 +1,11 @@
+
+# Listing 14-6. screen-demo4 Demonstrates the wrap and print_block Functions
+
+
+clear
+wrap "The quick brown fox jumps over the lazy dog" 15
+x=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+printat 1 1
+printf "%s\n" $x{,,,,,,,,,,}             ## print 11 lines of 'x's
+print_block_at 3 33 "${wrap[@]}"
+printat 12 1
